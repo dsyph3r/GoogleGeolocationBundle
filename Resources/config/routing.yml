@@ -1,0 +1,3 @@
+GoogleGeolocationBundle_homepage:
+    pattern:  /
+    defaults: { _controller: GoogleGeolocationBundle:Default:index }

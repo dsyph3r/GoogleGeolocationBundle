@@ -1,0 +1,67 @@
+<?php
+
+namespace Google\GeolocationBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass="Google\GeolocationBundle\Repository\LocationRepository")
+ * @ORM\Table(name="location")
+ * @ORM\HasLifecycleCallbacks()
+ */
+class Location
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $search;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $matches;
+    
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $result;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $hits;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $updated;
+    
+    public function __construct()
+    {
+        $this->setMatches(0);
+        $this->setHits(0);
+        $this->setCreated(new \DateTime());
+        $this->setUpdated(new \DateTime());
+    }
+    
+    /**
+     * @ORM\preUpdate
+     */
+    public function setUpdatedValue()
+    {
+       $this->setUpdated(new \DateTime());
+    }
+
+}
