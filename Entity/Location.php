@@ -24,10 +24,15 @@ class Location
     protected $search;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="smallint")
      */
     protected $matches;
-    
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    protected $status;
+
     /**
      * @ORM\Column(type="text")
      */
@@ -37,7 +42,7 @@ class Location
      * @ORM\Column(type="integer")
      */
     protected $hits;
-    
+
     /**
      * @ORM\Column(type="datetime")
      */
@@ -47,7 +52,7 @@ class Location
      * @ORM\Column(type="datetime")
      */
     protected $updated;
-    
+
     public function __construct()
     {
         $this->setMatches(false);
@@ -55,7 +60,7 @@ class Location
         $this->setCreated(new \DateTime());
         $this->setUpdated(new \DateTime());
     }
-    
+
     /**
      * @ORM\preUpdate
      */
@@ -68,11 +73,11 @@ class Location
     {
         $this->setHits($this->getHits() + 1);
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -92,7 +97,7 @@ class Location
     /**
      * Get search
      *
-     * @return string 
+     * @return string
      */
     public function getSearch()
     {
@@ -112,7 +117,7 @@ class Location
     /**
      * Get matches
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getMatches()
     {
@@ -132,17 +137,17 @@ class Location
     /**
      * Get result
      *
-     * @return string 
+     * @return string
      */
     public function getResult($raw = true)
     {
         return $this->result;
     }
-    
+
     /**
      * Get result as array
      *
-     * @return string 
+     * @return string
      */
     public function getResultArray()
     {
@@ -168,7 +173,7 @@ class Location
     /**
      * Get hits
      *
-     * @return integer 
+     * @return integer
      */
     public function getHits()
     {
@@ -188,7 +193,7 @@ class Location
     /**
      * Get created
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreated()
     {
@@ -208,10 +213,30 @@ class Location
     /**
      * Get updated
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getUpdated()
     {
         return $this->updated;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

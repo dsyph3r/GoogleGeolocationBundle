@@ -23,38 +23,62 @@ class GeolocationTest extends WebTestCase
         $this->em = $kernel->getContainer()
                            ->get('doctrine.orm.entity_manager');
     }
-    
+
     public function testSuccesfulGeolocation()
     {
-        $geolocationMock = $this->getGeolocationMock();
+        $geolocationApiMock = $this->getGeolocationApiMock();
 
-        $geolocationMock->expects($this->once())
+        $geolocationApiMock->expects($this->any())
             ->method('request')
             ->will($this->returnValue($this->getSuccessfulResultRequest()));
 
-        $location = $geolocationMock->geolocate("Wales, UK");
-        $this->assertEquals(true, $location->getMatches());
-        
+        $location = $geolocationApiMock->locateAddress("Wales, UK");
+        $this->assertEquals(1, $location->getMatches());
+
         // Check the cache was hit this time
-        $location = $geolocationMock->geolocate("Wales, UK");
-        $this->assertEquals(1, $location->getHits());
+        $hits = $location->getHits();
+        $location = $geolocationApiMock->locateAddress("Wales, UK");
+        $this->assertEquals($hits + 1, $location->getHits());
     }
-    
+
     public function testNoMatchesGeolocation()
     {
-        $geolocationMock = $this->getGeolocationMock();
+        $geolocationApiMock = $this->getGeolocationApiMock();
 
-        $geolocationMock->expects($this->once())
+        $geolocationApiMock->expects($this->any())
             ->method('request')
             ->will($this->returnValue($this->getFailedResultRequest()));
 
-        $location = $geolocationMock->geolocate("adsdas,fdsfsdf,fsdf");
-        $this->assertEquals(false, $location->getMatches());
+        $location = $geolocationApiMock->locateAddress("adsdas,fdsfsdf,fsdf");
+        $this->assertEquals(0, $location->getMatches());
     }
 
-    protected function getGeolocationMock()
+    public function testSuccesfulGeolocationNoCache()
     {
-        return $this->getMock('Google\GeolocationBundle\Geolocation\Geolocation', array('request'), array($this->em));
+        $geolocationApiMock = $this->getGeolocationApiMock(false);
+
+        $geolocationApiMock->expects($this->once())
+            ->method('request')
+            ->will($this->returnValue($this->getSuccessfulResultRequest()));
+
+        $location = $geolocationApiMock->locateAddress("Cardiff, Wales");
+        $this->assertEquals(1, $location->getMatches());
+
+    }
+
+    protected function getGeolocationApiMock($cacheAvailable = true)
+    {
+        $mock = $this->getMock('Google\GeolocationBundle\Geolocation\GeolocationApi',
+            array('request')
+        );
+
+        if (true === $cacheAvailable)
+        {
+            $mock->setEntityManager($this->em);
+            $mock->setDailyLimit(20);
+        }
+
+        return $mock;
     }
 
     protected function getSuccessfulResultRequest()
@@ -64,11 +88,13 @@ class GeolocationTest extends WebTestCase
             'headers'   => array(),
             'data'      => json_encode(array(
                 'status'    => 'OK',
-                'results'   => array()
+                'results'   => array(
+                    'cardiff, wales, uk'
+                )
             ))
         );
     }
-    
+
     protected function getFailedResultRequest()
     {
         return array(
@@ -80,7 +106,7 @@ class GeolocationTest extends WebTestCase
             ))
         );
     }
-    
+
     protected function getLimitedResultRequest()
     {
         return array(
@@ -92,5 +118,4 @@ class GeolocationTest extends WebTestCase
             ))
         );
     }
-
 }

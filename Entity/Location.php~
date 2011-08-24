@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Google\GeolocationBundle\Repository\LocationRepository")
- * @ORM\Table(name="location")
+ * @ORM\Table(name="google_geolocation_location")
  * @ORM\HasLifecycleCallbacks()
  */
 class Location
@@ -27,9 +27,14 @@ class Location
      * @ORM\Column(type="boolean")
      */
     protected $matches;
-    
+
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=20)
+     */
+    protected $status;
+
+    /**
+     * @ORM\Column(type="text")
      */
     protected $result;
 
@@ -37,7 +42,7 @@ class Location
      * @ORM\Column(type="integer")
      */
     protected $hits;
-    
+
     /**
      * @ORM\Column(type="datetime")
      */
@@ -47,15 +52,20 @@ class Location
      * @ORM\Column(type="datetime")
      */
     protected $updated;
-    
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $cached;
+
     public function __construct()
     {
-        $this->setMatches(0);
+        $this->setMatches(false);
         $this->setHits(0);
         $this->setCreated(new \DateTime());
         $this->setUpdated(new \DateTime());
     }
-    
+
     /**
      * @ORM\preUpdate
      */
@@ -64,4 +74,204 @@ class Location
        $this->setUpdated(new \DateTime());
     }
 
+    public function incrementHits()
+    {
+        $this->setHits($this->getHits() + 1);
+    }
+
+    public function isRequestAgainAllowed(\DateTime $now = null)
+    {
+        if (true === is_null($now))
+        {
+            $now = new \DateTime;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set search
+     *
+     * @param string $search
+     */
+    public function setSearch($search)
+    {
+        $this->search = $search;
+    }
+
+    /**
+     * Get search
+     *
+     * @return string
+     */
+    public function getSearch()
+    {
+        return $this->search;
+    }
+
+    /**
+     * Set matches
+     *
+     * @param boolean $matches
+     */
+    public function setMatches($matches)
+    {
+        $this->matches = $matches;
+    }
+
+    /**
+     * Get matches
+     *
+     * @return boolean
+     */
+    public function getMatches()
+    {
+        return $this->matches;
+    }
+
+    /**
+     * Set result
+     *
+     * @param string $result
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+    }
+
+    /**
+     * Get result
+     *
+     * @return string
+     */
+    public function getResult($raw = true)
+    {
+        return $this->result;
+    }
+
+    /**
+     * Get result as array
+     *
+     * @return string
+     */
+    public function getResultArray()
+    {
+        $results = array();
+        if ($location->getMatches())
+        {
+            // Retrieve the result.
+            $results = json_decode($location->getResult());
+        }
+        return $result;
+    }
+
+    /**
+     * Set hits
+     *
+     * @param integer $hits
+     */
+    public function setHits($hits)
+    {
+        $this->hits = $hits;
+    }
+
+    /**
+     * Get hits
+     *
+     * @return integer
+     */
+    public function getHits()
+    {
+        return $this->hits;
+    }
+
+    /**
+     * Set created
+     *
+     * @param datetime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * Get created
+     *
+     * @return datetime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param datetime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return datetime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set cached
+     *
+     * @param datetime $cached
+     */
+    public function setCached($cached)
+    {
+        $this->cached = $cached;
+    }
+
+    /**
+     * Get cached
+     *
+     * @return datetime
+     */
+    public function getCached()
+    {
+        return $this->cached;
+    }
 }

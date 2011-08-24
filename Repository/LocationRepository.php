@@ -27,4 +27,14 @@ class LocationRepository extends EntityRepository
             return null;
         }
     }
+
+    public function cleanCache($expiresAt)
+    {
+        return $this->createQueryBuilder('l')
+                    ->delete()
+                    ->where('l.created < :expires')
+                    ->setParameter('expires', $expiresAt)
+                    ->getQuery()
+                    ->execute();
+    }
 }
