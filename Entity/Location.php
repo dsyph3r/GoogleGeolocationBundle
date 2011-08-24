@@ -29,7 +29,7 @@ class Location
     protected $matches;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="text")
      */
     protected $result;
 
@@ -134,9 +134,25 @@ class Location
      *
      * @return string 
      */
-    public function getResult()
+    public function getResult($raw = true)
     {
         return $this->result;
+    }
+    
+    /**
+     * Get result as array
+     *
+     * @return string 
+     */
+    public function getResultArray()
+    {
+        $results = array();
+        if ($location->getMatches())
+        {
+            // Retrieve the result.
+            $results = json_decode($location->getResult());
+        }
+        return $result;
     }
 
     /**

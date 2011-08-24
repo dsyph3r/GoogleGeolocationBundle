@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class LocationRepository extends EntityRepository
 {
-    public function getCachedLocation($search)
+    public function getCachedAddress($search)
     {
         $qb = $this->createQueryBuilder('l')
                    ->select('l')
