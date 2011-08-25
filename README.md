@@ -71,11 +71,11 @@ To retrieve the service from the container:
 To find an address:
 
     $geolocationApi = $this->get('google_geolocation.geolocation_api');
-    $location = $geo->locateAddress("wales, uk");
+    $location = $geolocationApi->locateAddress("Wales, UK");
 
     if ($location->getMatches() > 0)
     {
-        $matches = json_decode($location->getResult());
+        $matches = json_decode($location->getResult(), true);
     }
 
 ### Additional Usage
