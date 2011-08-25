@@ -75,6 +75,31 @@ class Location
     }
 
     /**
+     * Get the address components for a Geocoded result. Geocoding service
+     * may return more than 1 match for a search. The $match param can
+     * be used to specify the result to return
+     *
+     * @param   int     $match      Result match to return
+     * @return  array               Key/Value address components
+     */
+    public function getAddress($match = 1)
+    {
+        $matches = json_decode($this->getResult(), true);
+        
+        $components = array();
+        if (isset($matches[$match]))
+        {
+            foreach ($matches[$match]['address_components'] as $component)
+            {
+                $type = $component['types'][0];
+                $components[$type] = $component['long_name'];
+            }
+        }
+        
+        return $components;
+    }
+    
+    /**
      * Get id
      *
      * @return integer
