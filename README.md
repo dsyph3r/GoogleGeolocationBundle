@@ -19,14 +19,13 @@ service.
 
         Add the following to the `deps` file:
 
-            [GoogleGeolocationBundle]
-                git=git://github.com/dsyph3r/GoogleGeolocationBundle.git
-                target=/bundles/Google/GeolocationBundle
-
             [curl-php]
                 git=git://github.com/dsyph3r/curl-php.git
                 target=/curl-php
-
+                
+            [GoogleGeolocationBundle]
+                git=git://github.com/dsyph3r/GoogleGeolocationBundle.git
+                target=/bundles/Google/GeolocationBundle
 
         Run the vendors script:
 
