@@ -8,8 +8,8 @@ service.
 
 ## Requirements
 
- [curl-php](https://github.com/dsyph3r/curl-php) library
- cURL
+ * [curl-php](https://github.com/dsyph3r/curl-php) library
+ * cURL
 
 ## Installation
 
