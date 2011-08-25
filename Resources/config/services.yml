@@ -8,3 +8,7 @@ parameters:
 services:
     google_geolocation.geolocation_api:
         class:      %google_geolocation.geolocation_api.class%
+        #calls:
+        #    - [ setEntityManager, [ @doctrine.orm.entity_manager ] ]
+        #    - [ setDailyLimit, [ %google_geolocation.geolocation_api.daily_limit% ] ]
+        #    - [ setCacheLifetime, [ %google_geolocation.geolocation_api.cache_lifetime% ] ]
