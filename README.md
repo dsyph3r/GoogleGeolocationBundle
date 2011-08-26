@@ -5,7 +5,7 @@
 A Symfony 2 bundle for the
 [Google Geocoding API](http://code.google.com/apis/maps/documentation/geocoding/)
 service.
-
+ 
 ## Requirements
 
  * [curl-php](https://github.com/dsyph3r/curl-php) library
@@ -22,7 +22,7 @@ service.
             [curl-php]
                 git=git://github.com/dsyph3r/curl-php.git
                 target=/curl-php
-                
+
             [GoogleGeolocationBundle]
                 git=git://github.com/dsyph3r/GoogleGeolocationBundle.git
                 target=/bundles/Google/GeolocationBundle
