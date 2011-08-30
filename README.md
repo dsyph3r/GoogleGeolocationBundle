@@ -75,6 +75,12 @@ To find an address:
     if ($location->getMatches() > 0)
     {
         $matches = json_decode($location->getResult(), true);
+        
+        // Get address components [city, country, postcode, etc] for 1st match
+        $components = $location->getAddressComponents(0);
+        
+        // Get LatLng for 2nd match
+        $latLng = $location->getLatLng(1);
     }
 
 ### Additional Usage
@@ -112,6 +118,6 @@ specified by Google for use of the Geocoding API.
 
 The Geocoding API service must only be used in conjunction with a Google Map.
 The caching feature provided by the bundle is for temporary caching use in order
-to enhance the user experiance when using Geocoding (This is permitted by the
+to enhance the user experience when using Geocoding (This is permitted by the
 TOS). You should run the clean cache task periodically to clean up the cache
-values. The lifetime of eacg Geocoding result can be set via the paramater.
+values. The lifetime of each Geocoding result can be set via the paramater.
