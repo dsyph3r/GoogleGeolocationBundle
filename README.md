@@ -110,6 +110,11 @@ Run the following task:
 
     $ php app/console google:geolocation:cache-clean
 
+## TODO
+ 
+ * Explore use of Zend Caching layer instead of DB - Zend caching provides a SQLite option which would be useful
+   for some projects.
+   
 ## Google Terms of Service
 
 Please respect the
@@ -120,4 +125,5 @@ The Geocoding API service must only be used in conjunction with a Google Map.
 The caching feature provided by the bundle is for temporary caching use in order
 to enhance the user experience when using Geocoding (This is permitted by the
 TOS). You should run the clean cache task periodically to clean up the cache
-values. The lifetime of each Geocoding result can be set via the paramater.
+values. The lifetime of each Geocoding result can be set via the paramater 
+`google_geolocation.geolocation_api.cache_lifetime`. By default this is set to 24 hours
