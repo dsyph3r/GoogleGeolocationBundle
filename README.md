@@ -98,8 +98,28 @@ The service is configured by default to not use the caching layer.
 
 The caching layer provides a cache of previous requests made to the Google Geocoding API
 to reduce the number of requests required for the service. It also allows limiting of
-requests made to the service. Both of these features are useful if you heavly use
+requests made to the service. Both of these features are useful if you heavily use
 the Google Geocoding API.
+
+To enable the use of the caching layer you need to configure the service. Update
+the config at `app/config/config.yml` with the following:
+
+```
+services:
+    google_geolocation.geolocation_api:
+        class:      %google_geolocation.geolocation_api.class%
+        calls:
+            - [ setEntityManager, [ @doctrine.orm.entity_manager ] ]
+            - [ setDailyLimit, [ %google_geolocation.geolocation_api.daily_limit% ] ]
+            - [ setCacheLifetime, [ %google_geolocation.geolocation_api.cache_lifetime% ] ]
+```
+
+The defaults for the paramaters are as follows:
+
+```
+google_geolocation.geolocation_api.daily_limit: 2500    # Daily requests
+google_geolocation.geolocation_api.cache_lifetime: 24   # Hours
+``` 
 
 ### Clearing the cache
 
