@@ -193,7 +193,6 @@ class GeolocationApi
             throw new \Exception("Unable to clean cache. There is no cache available");
         }
 
-
         $expiresAt = date("Y-m-d H:i:s", mktime(date("H")-$this->cacheLifetime));
         // Clean cache
         return $this->em
@@ -250,7 +249,7 @@ class GeolocationApi
      */
     protected function request($search)
     {
-        return $browser->get('http://maps.googleapis.com/maps/api/geocode/json?' .
+        return $this->browser->get('http://maps.googleapis.com/maps/api/geocode/json?' .
             http_build_query(
                 array('address' => $search, 'sensor' => 'false')
             )
