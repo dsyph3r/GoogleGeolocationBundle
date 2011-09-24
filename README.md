@@ -8,7 +8,7 @@ service.
  
 ## Requirements
 
-    PHP 5.3+
+ * PHP 5.3+
 
 ## Dependancies
 
