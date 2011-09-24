@@ -8,20 +8,23 @@ service.
  
 ## Requirements
 
- * [curl-php](https://github.com/dsyph3r/curl-php) library
- * cURL
+    PHP 5.3+
+
+## Dependancies
+
+ * [Buzz](https://github.com/kriswallsmith/Buzz)
 
 ## Installation
 
-1. Add bundle and curl-php library dependancy to `vendor` dir:
+1. Add bundle and Buzz library dependancy to `vendor` dir:
 
     * Using vendors script
 
         Add the following to the `deps` file:
 
-            [curl-php]
-                git=git://github.com/dsyph3r/curl-php.git
-                target=/curl-php
+            [Buzz]
+                git=git://github.com/kriswallsmith/Buzz.git
+                target=/Buzz
 
             [GoogleGeolocationBundle]
                 git=git://github.com/dsyph3r/GoogleGeolocationBundle.git
@@ -33,15 +36,15 @@ service.
 
     * Using git submodules:
 
+            $ git submodule add git://github.com/kriswallsmith/Buzz.git vendor/Buzz
             $ git submodule add git://github.com/dsyph3r/GoogleGeolocationBundle.git vendor/bundles/Google/GeolocationBundle
-            $ git submodule add git://github.com/dsyph3r/curl-php.git vendor/curl-php
 
 2. Add the Google and Network namespace to your autoloader:
 
         // app/autoload.php
         $loader->registerNamespaces(array(
             // ..
-            'Network'   => __DIR__.'/../vendor/curl-php/lib',
+            'Buzz'      => __DIR__.'/../vendor/Buzz/lib',
             'Google'    => __DIR__.'/../vendor/bundles',
         ));
 

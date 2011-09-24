@@ -4,7 +4,7 @@ namespace Google\GeolocationBundle\Geolocation;
 
 use Google\GeolocationBundle\Entity\Location;
 use Google\GeolocationBundle\Entity\ApiLog;
-use Network\Curl\Curl;
+use Buzz\Browser;
 
 /**
  * GeolocationApi
@@ -42,6 +42,13 @@ class GeolocationApi
      * @var int
      */
     protected $dailyLimit;
+    
+    /**
+     * Network layer
+     *
+     * @var Buzz\Browser
+     */
+    protected $browser;
 
     /**
      * Lifetime of Geocoded results in cache in hours. Only available if
@@ -51,8 +58,10 @@ class GeolocationApi
      */
     protected $cacheLifetime;
 
-    public function __construct()
+    public function __construct(Browser $browser = null)
     {
+        $this->browser = $browser ?: new Browser();
+        
         $this->em               = null;
         $this->dailyLimit       = 0;            // No restriction
         $this->cacheLifetime    = 0;
@@ -95,6 +104,16 @@ class GeolocationApi
         $this->cacheLifetime = $cacheLifetime;
     }
 
+    /**
+     * Set Network layer
+     *
+     * @param Browser   $browser        Browser
+     */
+    public function setBrowser(Browser $browser)
+    {
+        $this->browser = $browser;
+    }
+    
     /**
      * Enable the cache
      */
@@ -194,7 +213,7 @@ class GeolocationApi
         if ($this->apiAttemptsAllowed())
         {
             $response   = $this->request($location->getSearch());
-            $data       = json_decode($response['data'], true);
+            $data       = json_decode($response->getContent(), true);
 
             if (true === $this->cacheAvailable)
             {
@@ -231,9 +250,11 @@ class GeolocationApi
      */
     protected function request($search)
     {
-        $curl = new Curl();
-        $params = array('address' => $search, 'sensor' => 'false');
-        return $curl->get('http://maps.googleapis.com/maps/api/geocode/json', $params);
+        return $browser->get('http://maps.googleapis.com/maps/api/geocode/json?' .
+            http_build_query(
+                array('address' => $search, 'sensor' => 'false')
+            )
+        );
     }
 
     /**
