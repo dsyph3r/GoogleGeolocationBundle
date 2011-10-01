@@ -121,7 +121,7 @@ class GeolocationApi
     {
         if (true === is_null($this->em))
         {
-            throw new Exception("Cannot enable cache. EntityManager must be set via setEntityManager()");
+            throw new \Exception("Cannot enable cache. EntityManager must be set via setEntityManager()");
         }
         
         $this->cacheAvailable = true;
