@@ -131,7 +131,7 @@ of service (see below)
 
 Run the following task:
 
-    $ php app/console google:geolocation:cache-clean
+    $ php app/console google:geolocation:clean-cache
 
 ## TODO
  
