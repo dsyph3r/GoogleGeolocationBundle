@@ -1,0 +1,19 @@
+{
+    "name": "dsyph3r/google-geolocation-bundle",
+    "type": "symfony-bundle",
+    "description": "Google Geolocaton integration for your Symfony2 project",
+    "keywords": ["google", "geolocation"],
+    "homepage": "https://github.com/dsyph3r/GoogleGeolocationBundle",
+    "license": "MIT",
+    "authors": [
+        { "name": "Darren Rees", "email": "d.syph.3r@gmail.com", "homepage": "http://blog.dsyph3r.com/" }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "kriswallsmith/buzz": "<=0.5"
+    },
+    "autoload": {
+        "psr-0": { "Google\\GeolocationBundle": "" }
+    },
+    "target-dir": "Google/GeolocationBundle"
+}
