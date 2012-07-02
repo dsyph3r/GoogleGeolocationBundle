@@ -204,12 +204,12 @@ class Location
     public function getResultArray()
     {
         $results = array();
-        if ($location->getMatches())
+        if ($this->getMatches())
         {
             // Retrieve the result.
-            $results = json_decode($location->getResult());
+            $results = json_decode($this->getResult());
         }
-        return $result;
+        return $results;
     }
 
     /**
