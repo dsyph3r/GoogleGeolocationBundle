@@ -62,7 +62,7 @@ class Location
     }
 
     /**
-     * @ORM\preUpdate
+     * @ORM\PreUpdate
      */
     public function setUpdatedValue()
     {
