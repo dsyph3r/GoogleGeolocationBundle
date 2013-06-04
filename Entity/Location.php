@@ -66,7 +66,7 @@ class Location
      */
     public function setUpdatedValue()
     {
-       $this->setUpdated(new \DateTime());
+        $this->setUpdated(new \DateTime());
     }
 
     public function incrementHits()
@@ -80,25 +80,47 @@ class Location
      * be used to specify the result to return
      *
      * @param   int     $match      Result match to return (indexes start at 0)
+     * @param   string  $nameType   long_name|short_name
      * @return  array               Key/Value address components
      */
-    public function getAddressComponents($match = 0)
+    public function getAddressComponents($match = 0, $nameType = 'long_name')
     {
         $matches = json_decode($this->getResult(), true);
+        if ($nameType != 'short_name' && $nameType != 'long_name') {
+            $nameType = 'long_name';
+        }
         
-        if (false === isset($matches[$match]))
-        {
+        if (false === isset($matches[$match])) {
             return false;
         }
         
         $components = array();
-        foreach ($matches[$match]['address_components'] as $component)
-        {
-            $type = $component['types'][0];
-            $components[$type] = $component['long_name'];
+        foreach ($matches[$match]['address_components'] as $component) {
+            if (isset($component['types'][0])) {
+                $type = $component['types'][0];
+            } else {
+                $type = 'unknow';
+            }
+            $components[$type] = $component[$nameType];
         }
 
         return $components;
+    }
+
+    /**
+     * Get the address components for a Geocoded result. Geocoding service
+     * may return more than 1 match for a search. The $match param can
+     * be used to specify the result to return
+     *
+     * @param   string  $detail     Detail value wanted
+     * @param   int     $match      Result match to return (indexes start at 0)
+     * @param   string  $nameType   long_name|short_name
+     * @return  array               Key/Value address components
+     */
+    public function getAddressComponentsDetail($detail, $match = 0, $nameType = 'long_name')
+    {
+        $componentList = $this->getAddressComponents($match, $nameType);
+        return $componentList[$detail];
     }
     
     /**
