@@ -1,9 +1,9 @@
 {
-    "name": "mapado/google-geolocation-bundle",
+    "name": "dsyph3r/google-geolocation-bundle",
     "type": "symfony-bundle",
     "description": "Google Geolocaton integration for your Symfony2 project",
     "keywords": ["google", "geolocation"],
-    "homepage": "https://github.com/mapado/GoogleGeolocationBundle",
+    "homepage": "https://github.com/dsyph3r/GoogleGeolocationBundle",
     "license": "MIT",
     "authors": [
         { "name": "Darren Rees", "email": "d.syph.3r@gmail.com", "homepage": "http://blog.dsyph3r.com/" }
