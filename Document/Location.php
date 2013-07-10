@@ -1,74 +1,69 @@
 <?php
 
-namespace Google\GeolocationBundle\Entity;
+namespace Google\GoogleGeolocationBundle\Document;
 
 use Webinfopro\Bundle\GoogleGeolocationBundle\Model\BaseLocation;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity(repositoryClass="Google\GeolocationBundle\LocationRepository")
- * @ORM\Table(name="google_geolocation_location")
- * @ORM\HasLifecycleCallbacks()
+ * @MongoDB\Document(
+ * 					collection="google_geolocation_location",
+ * 					repositoryClass="Webinfopro\Bundle\GoogleGeolocationBundle\Document\LocationRepository")
  */
 class Location extends BaseLocation
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+	/**
+	 * @MongoDB\Id
+	 */
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+	 * @MongoDB\String
      */
     protected $search;
 
     /**
-     * @ORM\Column(type="smallint")
+	 * @MongoDB\Int
      */
     protected $matches;
 
     /**
-     * @ORM\Column(type="string", length=20)
+	 * @MongoDB\String
      */
     protected $status;
 
     /**
-     * @ORM\Column(type="text")
+	 * @MongoDB\String
      */
     protected $result;
 
     /**
-     * @ORM\Column(type="integer")
+	 * @MongoDB\Int
      */
     protected $hits;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+	/**
+	 * @var datetime $created
+	 *
+	 * @MongoDb\Timestamp
+	 * @Gedmo\Timestampable(on="create")
+	 */
     protected $created;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+	/**
+	 * @var datetime $updated
+	 *
+	 * @MongoDb\Timestamp
+	 * @Gedmo\Timestampable()
+	 */
     protected $updated;
 
     public function __construct()
     {
         $this->setMatches(false);
         $this->setHits(0);
-        $this->setCreated(new \DateTime());
-        $this->setUpdated(new \DateTime());
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function setUpdatedValue()
-    {
-       $this->setUpdated(new \DateTime());
     }
 
     /**
@@ -89,6 +84,7 @@ class Location extends BaseLocation
     public function setSearch($search)
     {
         $this->search = $search;
+        return $this;
     }
 
     /**
@@ -109,6 +105,7 @@ class Location extends BaseLocation
     public function setMatches($matches)
     {
         $this->matches = $matches;
+        return $this;
     }
 
     /**
@@ -129,6 +126,7 @@ class Location extends BaseLocation
     public function setResult($result)
     {
         $this->result = $result;
+        return $this;
     }
 
     /**
@@ -149,6 +147,7 @@ class Location extends BaseLocation
     public function setHits($hits)
     {
         $this->hits = $hits;
+        return $this;
     }
 
     /**
@@ -169,6 +168,7 @@ class Location extends BaseLocation
     public function setCreated($created)
     {
         $this->created = $created;
+        return $this;
     }
 
     /**
@@ -189,6 +189,7 @@ class Location extends BaseLocation
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+        return $this;
     }
 
     /**
@@ -209,6 +210,7 @@ class Location extends BaseLocation
     public function setStatus($status)
     {
         $this->status = $status;
+        return $this;
     }
 
     /**

@@ -23,6 +23,9 @@ class GoogleGeolocationExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
+        $loader->load($config['db_driver'].'.yml');
+
+        $container->setParameter('google_geolocation.geolocation_api.daily_limit', $config['daily_limit']);
+        $container->setParameter('google_geolocation.geolocation_api.cache_lifetime', $config['cache_lifetime']);
     }
 }

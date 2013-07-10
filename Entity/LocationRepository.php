@@ -1,6 +1,6 @@
 <?php
 
-namespace Google\GeolocationBundle\Repository;
+namespace Webinfopro\Bundle\GoogleGeolocationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
