@@ -28,11 +28,15 @@ class CleanCacheCommand extends ContainerAwareCommand
         try
         {
             $cleanCount = $geolocationApi->cleanCache();
+            if(is_array($cleanCount))
+            	$cleanCount = $cleanCount['n'];
             $output->writeln($cleanCount . " cache entries were removed");
         }
         catch (\Exception $e)
         {
-            $output->writeln("Cache not available. Cannot clean!");
+			$output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+
+            return;
         }
     }
 }

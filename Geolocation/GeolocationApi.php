@@ -2,8 +2,11 @@
 
 namespace Google\GeolocationBundle\Geolocation;
 
-use Google\GeolocationBundle\Entity\Location;
-use Google\GeolocationBundle\Entity\ApiLog;
+use Webinfopro\Bundle\GoogleGeolocationBundle\Entity\Location;
+use Webinfopro\Bundle\GoogleGeolocationBundle\Entity\ApiLog;
+use Webinfopro\Bundle\GoogleGeolocationBundle\Document\Location as MongoLocation;
+use Webinfopro\Bundle\GoogleGeolocationBundle\Document\ApiLog as MongoApiLog;
+
 use Buzz\Browser;
 
 /**
@@ -42,13 +45,15 @@ class GeolocationApi
      * @var int
      */
     protected $dailyLimit;
-    
+
     /**
      * Network layer
      *
      * @var Buzz\Browser
      */
     protected $browser;
+
+	protected $isORM = true;
 
     /**
      * Lifetime of Geocoded results in cache in hours. Only available if
@@ -61,7 +66,7 @@ class GeolocationApi
     public function __construct(Browser $browser = null)
     {
         $this->browser = $browser ?: new Browser();
-        
+
         $this->em               = null;
         $this->dailyLimit       = 0;            // No restriction
         $this->cacheLifetime    = 0;
@@ -80,6 +85,21 @@ class GeolocationApi
         $this->em = $em;
         // Cache become available now
         $this->setCacheEnabled();
+    }
+
+    /**
+     * Set the Document Manager. This enables the availability of the cache
+     * and API limiting
+     *
+     * @param \Doctrine\ODM\DocumentManager   $em     DocumentManager
+     */
+    public function setDocumentManager(\Doctrine\ODM\MongoDB\DocumentManager $em = null)
+    {
+    	$this->em = $em;
+    	// Cache become available now
+    	$this->setCacheEnabled();
+
+    	$this->isORM = false;
     }
 
     /**
@@ -113,7 +133,7 @@ class GeolocationApi
     {
         $this->browser = $browser;
     }
-    
+
     /**
      * Enable the cache
      */
@@ -121,12 +141,12 @@ class GeolocationApi
     {
         if (true === is_null($this->em))
         {
-            throw new \Exception("Cannot enable cache. EntityManager must be set via setEntityManager()");
+            throw new \Exception("Cannot enable cache. Manager must be set via setEntityManager() OR setDocumentManager()");
         }
-        
+
         $this->cacheAvailable = true;
     }
-    
+
     /**
      * Disable the cache
      */
@@ -134,7 +154,7 @@ class GeolocationApi
     {
         $this->cacheAvailable = false;
     }
-    
+
     public function locateAddress($search)
     {
         $location = null;
@@ -148,8 +168,9 @@ class GeolocationApi
 
         if (true === is_null($location))
         {
-            // No cache, Use Google Geolocation API
-            $location = new Location();
+        	// No cache, Use Google Geolocation API
+           	$location = $this->getLocation();
+
             $location->setSearch($search);
 
             $location = $this->geolocate($location);
@@ -193,7 +214,16 @@ class GeolocationApi
             throw new \Exception("Unable to clean cache. There is no cache available");
         }
 
+        if($this->cacheLifetime == 0)
+        {
+        	throw new \Exception("Unable to clean cache. Lifetime=infinite");
+        }
+
         $expiresAt = date("Y-m-d H:i:s", mktime(date("H")-$this->cacheLifetime));
+
+        $this->em
+        ->getRepository('GoogleGeolocationBundle:ApiLog')->cleanCache();
+
         // Clean cache
         return $this->em
                     ->getRepository('GoogleGeolocationBundle:Location')
@@ -203,10 +233,8 @@ class GeolocationApi
     /**
      * Geolocate and populate Location entity with result
      *
-     * @param   Google\GeolocationBundle\Entity\Location    $location
-     * @return  Google\GeolocationBundle\Entity\Location
      */
-    protected function geolocate(\Google\GeolocationBundle\Entity\Location $location)
+    protected function geolocate($location)
     {
         // Check limiting
         if ($this->apiAttemptsAllowed())
@@ -307,7 +335,7 @@ class GeolocationApi
 
         if (true === is_null($apiLog))
         {
-            $apiLog = new ApiLog();
+            $apiLog = $this->getLog();
         }
 
         $apiLog->setLastStatus($response['status']);
@@ -317,5 +345,21 @@ class GeolocationApi
         $this->em->flush();
 
         return $apiLog;
+    }
+
+    protected function getLocation()
+    {
+    	if($this->isORM)
+    		return new Location;
+
+    	return new MongoLocation;
+    }
+
+    protected function getLog()
+    {
+    	if($this->isORM)
+    		return new ApiLog;
+
+    	return new MongoApiLog;
     }
 }

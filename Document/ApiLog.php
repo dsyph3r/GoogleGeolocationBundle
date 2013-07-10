@@ -1,56 +1,51 @@
 <?php
 
-namespace Google\GeolocationBundle\Entity;
+namespace Google\GoogleGeolocationBundle\Document;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity(repositoryClass="Google\GeolocationBundle\ApiLogRepository")
- * @ORM\Table(name="google_geolocation_api_log")
- * @ORM\HasLifecycleCallbacks()
+ * @MongoDB\Document(
+ * 					collection="google_geolocation_api_log",
+ * 					repositoryClass="Webinfopro\Bundle\GoogleGeolocationBundle\Document\ApiLogRepository")
  */
 class ApiLog
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+	/**
+	 * @MongoDB\Id
+	 */
+	protected $id;
 
     /**
-     * @ORM\Column(type="string", length=20)
+	 * @MongoDB\String
      */
     protected $lastStatus;
 
     /**
-     * @ORM\Column(type="integer")
+	 * @MongoDB\Int
      */
     protected $requests;
 
-    /**
-     * @ORM\Column(type="date", unique=true)
-     */
+	/**
+	 * @var datetime $created
+	 *
+	 * @MongoDb\Timestamp
+	 * @Gedmo\Timestampable(on="create")
+	 */
     protected $created;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+	/**
+	 * @var datetime $updated
+	 *
+	 * @MongoDb\Timestamp
+	 * @Gedmo\Timestampable()
+	 */
     protected $updated;
 
     public function __construct()
     {
         $this->setRequests(0);
-        $this->setCreated(new \DateTime());
-        $this->setUpdated(new \DateTime());
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function setUpdatedValue()
-    {
-       $this->setUpdated(new \DateTime());
     }
 
     public function incrementRequests()
@@ -58,11 +53,6 @@ class ApiLog
         $this->setRequests($this->getRequests() + 1);
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
     public function getId()
     {
         return $this->id;
@@ -76,6 +66,7 @@ class ApiLog
     public function setLastStatus($lastStatus)
     {
         $this->lastStatus = $lastStatus;
+        return $this;
     }
 
     /**
@@ -96,6 +87,7 @@ class ApiLog
     public function setRequests($requests)
     {
         $this->requests = $requests;
+        return $this;
     }
 
     /**
@@ -116,6 +108,7 @@ class ApiLog
     public function setCreated($created)
     {
         $this->created = $created;
+        return $this;
     }
 
     /**
@@ -136,6 +129,7 @@ class ApiLog
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+        return $this;
     }
 
     /**
