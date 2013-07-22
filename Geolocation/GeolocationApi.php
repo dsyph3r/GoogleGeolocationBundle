@@ -261,7 +261,7 @@ class GeolocationApi
      *   1. We haven't exceed the daily limit set at google_geolocation.geolocation_api.daily_limit
      *   2. The last request to API for today didn't return with status OVER_QUERY_LIMIT
      *
-     * @retrun bool         Returns TRUE is requests can be made to API
+     * @return bool         Returns TRUE is requests can be made to API
      */
     protected function apiAttemptsAllowed()
     {
